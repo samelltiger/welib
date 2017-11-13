@@ -1,10 +1,10 @@
 <?php
 namespace  welib\modules\weapi\controllers\common;
 
-use phpDocumentor\Reflection\Types\Boolean;
+
 use Yii;
 
-class BaseController extends \welib\controllers\common\BaseController;
+class BaseController extends \welib\controllers\common\BaseController
 {
     public $modelClass = 'welib\models\Goods';
     // public $needCheckAction = [];
@@ -31,32 +31,38 @@ class BaseController extends \welib\controllers\common\BaseController;
      */
     public function beforeAction($action){
         // 获取配置的默认允许的 action ，这些不需要 token 便可访问
-        $allowAction = Yii::$app->params['token'];
-
-        if ( \in_array( $action->id , (array)$allowAction) ) {
+        $signature = $this->get("signature");
+        $timestamp = $this->get("timestamp");
+        $nonce = $this->get("nonce");
+        if( $this->checkSignature($signature,$timestamp,$nonce) ){
             return parent::beforeAction($action);
         }
+         //throw new \yii\web\ForbiddenHttpException(sprintf('You can only %s articles that you\'ve created.', $action->id));
+        return false;
+//        return parent::beforeAction($action);
+    }
 
-        $token = $this->get("token");
-        $cache = Yii::$app -> cache;
-        $email = $cache -> get( $token ) ;
+         private function checkSignature($signature,$timestamp,$nonce)
+        {
+            // you must define TOKEN by yourself
+            $token = Yii::$app->params['wechat']['token'];
+            if (!$token) {
+                echo 'TOKEN is not defined!';
+            } else {
+                $tmpArr = array($token, $timestamp, $nonce);
+                // use SORT_STRING rule
+                sort($tmpArr, SORT_STRING);
+                $tmpStr = implode( $tmpArr );
+                $tmpStr = sha1( $tmpStr );
 
-        if( !$email ){
-            $url = Yii::$app->params["redirectUrl"]."?errcode=411&role=api";
-            header("HTTP/1.1 301");
-            header("location: ".$url);
-            die;
-            // return $this->redirect( Yii::$app->params["redirectUrl"]."?errcode=411&role=api"); // token过期，重定向到登录页面
+                if( $tmpStr == $signature ){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
         }
 
-        // 只要使用了一次，就将 token 重新设置并重新计时为30分钟
-        $cache -> delete( $token );
-        $cache -> set( $token , $email , 30*60 );
-
-        // throw new \yii\web\ForbiddenHttpException(sprintf('You can only %s articles that you\'ve created.', $action->id));
-        return parent::beforeAction($action);
-
-    }
 
     public function actionErr(){
         $code = $this->get("errcode");

@@ -53,7 +53,7 @@ return [
                     ],
 
                     "extraPatterns"=>[
-                        "Get test" => "test",
+                        "Get get" => "get", // 微信处理方法
                     ],
                 ],
 

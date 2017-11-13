@@ -2,12 +2,13 @@
 
 namespace welib\modules\weapi\controllers;
 
-use yii\rest\ActiveController;
+use Yii;
+use welib\modules\weapi\controllers\common\BaseController;
 
 /**
  * Default controller for the `weapi` module
  */
-class DefaultController extends ActiveController
+class DefaultController extends BaseController
 {
     /**
      * Renders the index view for the module
@@ -19,9 +20,11 @@ class DefaultController extends ActiveController
         return $this->render('index');
     }
 
-    public function actionTest()
+    public function actionGet()
     {
-        return ["aaaa","bbbbb"];
-        return $this->render('index');
+        $echostr = $this->get("echostr");
+        if($echostr){
+            return $echostr;
+        }
     }
 }
