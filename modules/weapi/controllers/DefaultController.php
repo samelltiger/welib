@@ -24,7 +24,8 @@ class DefaultController extends BaseController
     {
         $echostr = $this->get("echostr");
         if($echostr){
-            return $echostr;
+            echo $echostr;
+            exit;
         }
     }
 }
