@@ -3,7 +3,6 @@
 namespace welib\modules\weapi\controllers;
 
 use Yii;
-use yii\web\Response;
 
 use welib\modules\weapi\controllers\common\BaseController;
 
@@ -18,24 +17,20 @@ class DefaultController extends BaseController
      */
     public $modelClass = 'welib\modules\weapi\model';
 
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_HTML;
-        return $behaviors;
-    }
-
     public function actionIndex()
     {
         return $this->render('index');
     }
 
+    /**
+     * 收到微信服务器发来的信息，进行出了力的类
+     */
     public function actionGet()
     {
         $echostr = $this->get("echostr");
         if($echostr){
-            return  $echostr;
-//            exit;
+            echo  $echostr;
+            exit;
         }
     }
 }

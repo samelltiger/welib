@@ -3,12 +3,20 @@ namespace  welib\modules\weapi\controllers\common;
 
 
 use Yii;
+use yii\web\Response;
 
 class BaseController extends \welib\controllers\common\BaseController
 {
     public $modelClass = 'welib\models\Goods';
     // public $needCheckAction = [];
     // public $notCheckAction = [ "index" , "login","create"];
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_HTML;
+        return $behaviors;
+    }
 
     /**
      * 检查请求接口方法是否需要带token
