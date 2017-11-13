@@ -3,6 +3,8 @@
 namespace welib\modules\weapi\controllers;
 
 use Yii;
+use yii\web\Response;
+
 use welib\modules\weapi\controllers\common\BaseController;
 
 /**
@@ -15,6 +17,14 @@ class DefaultController extends BaseController
      * @return string
      */
     public $modelClass = 'welib\modules\weapi\model';
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_HTML;
+        return $behaviors;
+    }
+
     public function actionIndex()
     {
         return $this->render('index');
@@ -24,8 +34,8 @@ class DefaultController extends BaseController
     {
         $echostr = $this->get("echostr");
         if($echostr){
-            echo $echostr;
-            exit;
+            return  $echostr;
+//            exit;
         }
     }
 }
