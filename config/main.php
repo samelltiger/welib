@@ -18,8 +18,14 @@ return [
     ],
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-welib',
+//            'csrfParam' => '_csrf-welib',
+            'enableCsrfValidation' => false,
         ],
+//        'response' => [
+//            'format' => yii\web\Response::FORMAT_XML,
+//            'charset' => 'UTF-8',
+//            // ...
+//        ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,

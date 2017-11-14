@@ -14,7 +14,10 @@ class BaseController extends \welib\controllers\common\BaseController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_HTML;
+//        print_r($behaviors);exit;
+
+        $behaviors['contentNegotiator']['formats'] = '';
+        $behaviors['contentNegotiator']['formats']['application/xml'] = Response::FORMAT_XML;
         return $behaviors;
     }
 

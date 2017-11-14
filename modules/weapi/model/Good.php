@@ -12,4 +12,6 @@ use yii\base\Model;
 class Goods extends Model{
     public $username;
     public $password;
+
+
 }
