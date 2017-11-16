@@ -69,7 +69,6 @@ class DefaultController extends BaseController
     public function  actionGetToken( ){
         $pwd = $this->get("pwd");
         if( $pwd==Yii::$app->params["pwd"] ){
-            return ['test'=>"test"];
             list($token,$expires) = weFun::getAccessToken();
             return ["accessToken"   => $token,
                 "expires_in"         => $expires];
