@@ -42,6 +42,7 @@ class DefaultController extends BaseController
     }
 
     /**
+     *  处理微信的事件
      * @param $xml
      * @return string
      */
@@ -55,10 +56,25 @@ class DefaultController extends BaseController
 
             $templeate  = '<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><Content><![CDATA[%s]]></Content></xml>';
 
-            echo sprintf($templeate , $toUser, $fromUser, $time, $msgType, $content);
-            exit;
+            $ret_str    = sprintf($templeate , $toUser, $fromUser, $time, $msgType, $content);
+            weFun::returnSuccess($ret_str);
         }
 
+    }
+
+    /**
+     * api查看当前AccessToken及有效时间
+     * @return array|void
+     */
+    public function  actionGetToken( ){
+        $pwd = $this->get("pwd");
+        if( $pwd==Yii::$app->params["pwd"] ){
+            list($token,$expires) = weFun::getAccessToken();
+            return ["accessToken"   => $token,
+                "expires_in"         => $expires];
+        }
+
+        return ;
     }
 
     //用户授权接口：获取access_token、openId等；获取并保存用户资料到数据库

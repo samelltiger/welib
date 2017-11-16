@@ -42,6 +42,11 @@ class BaseController extends \welib\controllers\common\BaseController
      */
     public function beforeAction($action){
         // 获取配置的默认允许的 action ，这些不需要 token 便可访问
+        $ban_action = Yii::$app->params["ban"];
+        if( !in_array($action->id,$ban_action) ){
+            return parent::beforeAction($action);
+        }
+
         $signature = $this->get("signature");
         $timestamp = $this->get("timestamp");
         $nonce = $this->get("nonce");
