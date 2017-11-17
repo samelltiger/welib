@@ -6,6 +6,7 @@ use Yii;
 
 use welib\modules\weapi\controllers\common\BaseController;
 use welib\modules\weapi\controllers\common\weFun;
+use welib\modules\weapi\controllers\common\DealWx;
 
 /**
  * Default controller for the `weapi` module
@@ -35,8 +36,11 @@ class DefaultController extends BaseController
         }
 
         $xml = weFun::getXML();
+        $msg_type = ["text","image",'voice','video','shortvideo','location','link'];
         if($xml->MsgType == "event"){
             return $this->dealEvent($xml);
+        }elseif( in_array($xml->MsgType , $msg_type ) ){
+            return $this->dealMessage( $xml );
         }
         return ["aaaa"=>"value1","bbb"=>"value2"];
     }
@@ -48,18 +52,50 @@ class DefaultController extends BaseController
      */
     public function dealEvent($xml ){
         if(strtolower($xml->Event) == "subscribe"){
-            $toUser     = $xml->FromUserName;
-            $fromUser   = $xml->ToUserName;
-            $time       = time();
-            $msgType    = "text";
-            $content    = "欢迎关注我们的微信公众号";
-
-            $templeate  = '<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><Content><![CDATA[%s]]></Content></xml>';
-
-            $ret_str    = sprintf($templeate , $toUser, $fromUser, $time, $msgType, $content);
-            weFun::returnSuccess($ret_str);
+            $ret =[
+                "ToUserName"    => $xml->FromUserName,
+                "FromUserName"  => $xml->ToUserName,
+                "CreateTime"    => [
+                    "encode"    => false,
+                    "value"     => time(),
+                ],
+                "MsgType"       => "text",
+                "Content"       => "欢迎关注我们的微信公众号",
+            ];
+            weFun::returnSuccess(weFun::generoterXmlByArray( $ret ));
         }
 
+    }
+
+    /**
+     * 处理接收消息
+     * @param $xml
+     */
+    public function  dealMessage( $xml ){
+        // "text","image",'voice','video','shortvideo','location','link'
+        switch ($xml->MsgType ){
+            case "text":
+                return DealWx::dealTextMsg( $xml );
+                break;
+            case "image":
+                return DealWx::dealImageMsg( $xml );
+                break;
+            case "voice":
+                return DealWx::dealVoiceMsg( $xml );
+                break;
+            case "video":
+                return DealWx::dealVideoMsg( $xml );
+                break;
+            case "shortvideo":
+                return DealWx::dealShortvideoMsg( $xml );
+                break;
+            case "location":
+                return DealWx::dealLocationMsg( $xml );
+                break;
+            case "link":
+                return DealWx::dealLinkMsg( $xml );
+                break;
+        }
     }
 
     /**
@@ -74,7 +110,7 @@ class DefaultController extends BaseController
                 "expires_in"         => $expires];
         }
 
-        return ["test"=>"test"];
+        return ;
     }
 
     //用户授权接口：获取access_token、openId等；获取并保存用户资料到数据库

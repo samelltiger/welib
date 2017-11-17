@@ -38,6 +38,10 @@ class weFun
         exit;
     }
 
+    /**
+     * 获取 AccessToken及过期时间，如果文件缓存中没有accessToken 则通过微信api重新获取
+     * @return array
+     */
     public static function getAccessToken( ){
         // https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
         $cache = Yii::$app->cache;
@@ -70,9 +74,30 @@ class weFun
                 return [false,false];
             }
         }
-
-
     }
+
+     public static function generoterXmlByArray( Array $assoc_arr , $hasEncode = true ){
+            // '<xml>
+            //<ToUserName><![CDATA[%s]]></ToUserName>
+            //<FromUserName><![CDATA[%s]]></FromUserName>
+            //<CreateTime>%s</CreateTime>
+            //<MsgType><![CDATA[%s]]></MsgType>
+            //<Content><![CDATA[%s]]></Content>
+            //</xml>'
+
+            $xml = "<xml>";
+            if( is_array( $assoc_arr ) ){
+                foreach ( $assoc_arr as $key => $value ){
+                    if( (is_array( $value ) && $value['encode'] ) || !is_array( $value ) ) {
+                        $xml .= "<".$key."><![CDATA[".( is_array( $value ) ? $value['value']:$value )."]]></{$key}>";
+                    }else{
+                        $xml .= "<".$key.">".$value['value']."</{$key}>";
+                    }
+                }
+            }
+
+            return $xml."</xml>";
+      }
 }
 
 //$xml = simplexml_load_string('<?xml version="1.0" encoding="UTF-8">
