@@ -74,7 +74,7 @@ class DefaultController extends BaseController
                 "expires_in"         => $expires];
         }
 
-        return ;
+        return ["test"=>"test"];
     }
 
     //用户授权接口：获取access_token、openId等；获取并保存用户资料到数据库

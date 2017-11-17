@@ -49,7 +49,14 @@ class weFun
             $appsecret = Yii::$app->params['wechat']["appsecret"];
 
             $url = sprintf( "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s", $appid , $appsecret );
-            $content = file_get_contents($url);
+//            $content = file_get_contents($url);
+
+            //初始化一个curl会话
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $content = curl_exec($ch);
+            curl_close($ch);
 
             $res_arr = json_decode($content,true);
             if( isset($res_arr["access_token"]) ){
