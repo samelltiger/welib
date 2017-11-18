@@ -47,3 +47,4 @@ Temporary Items
 .apdisk
 modules/weapi/controllers/common/test.php
 web/update/ludashi.jpg
+*.jpg

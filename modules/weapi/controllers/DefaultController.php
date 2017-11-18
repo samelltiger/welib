@@ -127,8 +127,8 @@ class DefaultController extends BaseController
             }
             $file_path = $path.$file->name;
 
-            if(file_exists($file_path)){
-                $file->saveAs($path.$file->name);
+            if(!file_exists($file_path)){
+                $file->saveAs($path."/".$file->name);
             }else{
                 $rand = mt_rand(1,500);
                 if(!file_exists($path."/".$rand)){

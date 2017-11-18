@@ -55,7 +55,7 @@ class DealWx extends Model
             "CreateTime"      =>  time(),
             "MsgType"         =>  "image",
             "Image"           =>  [
-                "child"       =>[
+                "child"       =>  [
                     "MediaId"     =>  $xml->MediaId
                 ]
             ],
@@ -65,29 +65,30 @@ class DealWx extends Model
 
     public static function dealVoiceMsg( $xml ){
         /*<xml>
-<ToUserName><![CDATA[toUser]]></ToUserName>
-<FromUserName><![CDATA[fromUser]]></FromUserName>
-<CreateTime>12345678</CreateTime>
-<MsgType><![CDATA[voice]]></MsgType>
-<Voice>
-<MediaId><![CDATA[media_id]]></MediaId>
-</Voice>
-</xml>*/
+            <ToUserName><![CDATA[toUser]]></ToUserName>
+            <FromUserName><![CDATA[fromUser]]></FromUserName>
+            <CreateTime>12345678</CreateTime>
+            <MsgType><![CDATA[voice]]></MsgType>
+            <Voice>
+                <MediaId><![CDATA[media_id]]></MediaId>
+            </Voice>
+            </xml>
+        */
         weFun::returnSuccess();
     }
 
     public static function dealVideoMsg( $xml ){
         /*<xml>
-<ToUserName><![CDATA[toUser]]></ToUserName>
-<FromUserName><![CDATA[fromUser]]></FromUserName>
-<CreateTime>12345678</CreateTime>
-<MsgType><![CDATA[video]]></MsgType>
-<Video>
-<MediaId><![CDATA[media_id]]></MediaId>
-<Title><![CDATA[title]]></Title>
-<Description><![CDATA[description]]></Description>
-</Video>
-</xml>
+            <ToUserName><![CDATA[toUser]]></ToUserName>
+            <FromUserName><![CDATA[fromUser]]></FromUserName>
+            <CreateTime>12345678</CreateTime>
+            <MsgType><![CDATA[video]]></MsgType>
+            <Video>
+                <MediaId><![CDATA[media_id]]></MediaId>
+                <Title><![CDATA[title]]></Title>
+                <Description><![CDATA[description]]></Description>
+            </Video>
+            </xml>
          * */
         weFun::returnSuccess();
     }
