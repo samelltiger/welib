@@ -39,15 +39,16 @@ class DealWx extends Model
     }
 
     public static function dealImageMsg( $xml ){
-        /*<xml>  接收信息
-<ToUserName><![CDATA[toUser]]></ToUserName>
-<FromUserName><![CDATA[fromUser]]></FromUserName>
-<CreateTime>12345678</CreateTime>
-<MsgType><![CDATA[image]]></MsgType>
-<Image>
-<MediaId><![CDATA[media_id]]></MediaId>
-</Image>
-</xml>*/
+        /*<xml>
+            <ToUserName><![CDATA[公众号]]></ToUserName>
+            <FromUserName><![CDATA[粉丝号]]></FromUserName>
+            <CreateTime>1460536575</CreateTime>
+            <MsgType><![CDATA[image]]></MsgType>
+            <PicUrl><![CDATA[http://mmbiz.qpic.cn/xxxxxx /0]]></PicUrl>
+            <MsgId>6272956824639273066</MsgId>
+            <MediaId><![CDATA[gyci5a-xxxxx-OL]]></MediaId>
+            </xml>
+        */
         $xml = [
             "ToUserName"      =>  $xml->FromUserName,
             "FromUserName"    =>  $xml->ToUserName,
@@ -55,7 +56,7 @@ class DealWx extends Model
             "MsgType"         =>  "image",
             "Image"           =>  [
                 "child"       =>[
-                    "MediaId"     =>  $xml->Image->MediaId
+                    "MediaId"     =>  $xml->MediaId
                 ]
             ],
         ];
