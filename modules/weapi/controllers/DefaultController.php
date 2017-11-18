@@ -3,6 +3,7 @@
 namespace welib\modules\weapi\controllers;
 
 use Yii;
+use yii\web\UploadedFile;
 
 use welib\modules\weapi\controllers\common\BaseController;
 use welib\modules\weapi\controllers\common\weFun;
@@ -111,6 +112,44 @@ class DefaultController extends BaseController
         }
 
         return ;
+    }
+
+    /**
+     * 接受来自前端的文件，并保存到 update 目录下
+     */
+    public function actionUpdateFile( ){
+        $file = UploadedFile::getInstanceByName("test");
+        $path = "./update";
+
+        if(null!==$file){
+            if( !file_exists($path)){
+                mkdir($path);
+            }
+            $file_path = $path.$file->name;
+
+            if(file_exists($file_path)){
+                $file->saveAs($path.$file->name);
+            }else{
+                $rand = mt_rand(1,500);
+                if(!file_exists($path."/".$rand)){
+                    mkdir($path."/".$rand);
+                }
+                $file_path = $path."/".$rand."/".$file->name;
+                $file->saveAs($file_path);
+            }
+
+            $t = time();
+            Yii::$app->db->createCommand()->insert("file",[
+                'filename' => $file->name,
+                'path' => $file_path,
+                'file_size' => $file->size,
+                'type' => $file->type,
+                'create_time' => $t,
+                'update_time' => $t,
+            ])->execute();
+            return ["success"=>true];
+        }
+        return ["success"=>false];
     }
 
     //用户授权接口：获取access_token、openId等；获取并保存用户资料到数据库

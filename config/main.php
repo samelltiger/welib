@@ -61,6 +61,7 @@ return [
                     "extraPatterns"=>[
                         "Get get"       => "get", // 微信处理方法
                         "Get get-token" => "get-token",  //查看当前token
+                        "Post update-file" => "update-file",
                     ],
                 ],
 

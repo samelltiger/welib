@@ -76,7 +76,26 @@ class weFun
         }
     }
 
-     public static function generoterXmlByArray( Array $assoc_arr , $hasEncode = true ){
+    /**
+     * 将array 转成xml字符串
+     * eg：
+     *  assoc_arr = [
+     *  "ToUserName" =>  $xml->FromUserName,
+     *  "FromUserName" =>  $xml->ToUserName,
+     *  "CreateTime" =>
+     *      "child"  =>  [
+     *          "encode" => false,
+     *          "value"  => time()
+     *  ],
+     *  "MsgType" =>  "text",
+     *  "Content" =>  $xml->Content,
+     *  "MsgId" =>  $xml->MsgId,
+     *  ]
+     * @param array $assoc_arr
+     * @param bool $isChild
+     * @return string
+     */
+     public static function generoterXmlByArray( Array $assoc_arr , $isChild = false ){
             // '<xml>
             //<ToUserName><![CDATA[%s]]></ToUserName>
             //<FromUserName><![CDATA[%s]]></FromUserName>
@@ -86,9 +105,15 @@ class weFun
             //</xml>'
 
             $xml = "<xml>";
+            if( $isChild ){
+                $xml = "";
+            }
+
             if( is_array( $assoc_arr ) ){
                 foreach ( $assoc_arr as $key => $value ){
-                    if( (is_array( $value ) && $value['encode'] ) || !is_array( $value ) ) {
+                    if( is_array( $value ) && isset( $value['child'] ) ){
+                        $xml .= "<".$key.">".self::generoterXmlByArray( $value['child'] ,true )."</{$key}>";
+                    }elseif( (is_array( $value ) && isset( $value['encode'] ) && $value['encode'] ) || !is_array( $value ) ) {
                         $xml .= "<".$key."><![CDATA[".( is_array( $value ) ? $value['value']:$value )."]]></{$key}>";
                     }else{
                         $xml .= "<".$key.">".$value['value']."</{$key}>";
@@ -96,7 +121,12 @@ class weFun
                 }
             }
 
-            return $xml."</xml>";
+            return $isChild ? $xml :$xml."</xml>";
+      }
+
+      public static function getMediaFromWx( $media_id=false ){
+         //https://api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID
+
       }
 }
 

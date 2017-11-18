@@ -7,6 +7,8 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\UploadedFile;
+
 use common\models\LoginForm;
 use welib\models\PasswordResetRequestForm;
 use welib\models\ResetPasswordForm;
@@ -209,5 +211,16 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionUpdateFile(){
+        $file = UploadedFile::getInstanceByName("test");
+        if( !file_exists("./update")){
+            mkdir("./update");
+        }
+        $file->saveAs("update/".$file->name);
+        print_r( $file->name );
+        echo "hhhh";
+        exit;
     }
 }
