@@ -137,7 +137,7 @@ class DefaultController extends BaseController
                 $file_path = $path."/".$rand."/".$file->name;
                 $file->saveAs($file_path);
             }
-
+echo "hahah";exit;
             $t = time();
             Yii::$app->db->createCommand()->insert("file",[
                 'filename' => $file->name,
