@@ -96,37 +96,42 @@ class weFun
      * @return string
      */
      public static function generoterXmlByArray( Array $assoc_arr , $isChild = false ){
-            // '<xml>
-            //<ToUserName><![CDATA[%s]]></ToUserName>
-            //<FromUserName><![CDATA[%s]]></FromUserName>
-            //<CreateTime>%s</CreateTime>
-            //<MsgType><![CDATA[%s]]></MsgType>
-            //<Content><![CDATA[%s]]></Content>
-            //</xml>'
+         // '<xml>
+         //<ToUserName><![CDATA[%s]]></ToUserName>
+         //<FromUserName><![CDATA[%s]]></FromUserName>
+         //<CreateTime>%s</CreateTime>
+         //<MsgType><![CDATA[%s]]></MsgType>
+         //<Content><![CDATA[%s]]></Content>
+         //</xml>'
 
-            $xml = "<xml>";
-            if( $isChild ){
-                $xml = "";
-            }
+         $xml = "<xml>";
+         if( $isChild ){
+             $xml = "";
+         }
 
-            if( is_array( $assoc_arr ) ){
-                foreach ( $assoc_arr as $key => $value ){
-                    if( is_array( $value ) && isset( $value['child'] ) ){
-                        $xml .= "<".$key.">".self::generoterXmlByArray( $value['child'] ,true )."</{$key}>";
-                    }elseif( (is_array( $value ) && isset( $value['encode'] ) && $value['encode'] ) || !is_array( $value ) ) {
-                        $xml .= "<".$key."><![CDATA[".( is_array( $value ) ? $value['value']:$value )."]]></{$key}>";
-                    }else{
-                        $xml .= "<".$key.">".$value['value']."</{$key}>";
-                    }
-                }
-            }
+         if( is_array( $assoc_arr ) ){
+             foreach ( $assoc_arr as $key => $value ){
+                 if( is_array( $value ) && isset( $value['child'] ) ){
+                     $xml .= "<".$key.">".self::generoterXmlByArray( $value['child'] ,true )."</{$key}>";
+                 }elseif( (is_array( $value ) && isset( $value['encode'] ) && $value['encode'] ) || !is_array( $value ) ) {
+                     $xml .= "<".$key."><![CDATA[".( is_array( $value ) ? $value['value']:$value )."]]></{$key}>";
+                 }else{
+                     $xml .= "<".$key.">".$value['value']."</{$key}>";
+                 }
+             }
+         }
 
-            return $isChild ? $xml :$xml."</xml>";
+         return $isChild ? $xml :$xml."</xml>";
       }
 
-      public static function getMediaFromWx( $media_id=false ){
+     public static function getMediaFromWx( $media_id=false ){
          //https://api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID
-
+         $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=%s&media_id=%s";
+         $token = weFun::getAccessToken()[0];
+         if($token){
+             $ch = curl_init( sprintf($url,$token,$media_id) );
+             curl_setopt($ch,CURL);
+         }
       }
 }
 

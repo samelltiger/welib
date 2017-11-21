@@ -147,7 +147,7 @@ class DefaultController extends BaseController
                 'create_time' => $t,
                 'update_time' => $t,
             ])->execute();
-            return ["success"=>true];
+            return ["success"=>true,"imageUrl" => $_SERVER['SERVER_NAME']."/".str_replace("./","",$file_path) ];
         }
         return ["success"=>false];
     }
